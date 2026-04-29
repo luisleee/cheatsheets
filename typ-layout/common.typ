@@ -37,11 +37,12 @@
     "[，。．、：；？！”’》）』」】〗〕〉］｝“‘《（『「【〖〔〈［｛]+",
   ): it => it.text.replace("。", "．")
 
+  show strong: set text(font: fonts.sans)
   show std.title: set text(weight: fonts.weight, font: fonts.sans, size: font-size)
   show std.title: it => {
     show: align.with(center)
 
-    strong(text(size: 1.25em, it))
+    strong(text(size: 1.5em, it))
 
     document.author.join(", ")
     " | "
@@ -92,7 +93,7 @@
         inset: (left: terms.hanging-indent + terms.indent),
         {
           h(-terms.hanging-indent)
-          text(font: fonts.sans, it.term)
+          strong(it.term)
           terms.separator
           it.description
         },
