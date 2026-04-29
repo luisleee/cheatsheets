@@ -2,7 +2,7 @@
   default-font-size: 7pt,
   line-leading: .65em,
   par-spacing: .65em,
-  margin: 1em,
+  margin: 2em,
   inf: 114514em,
 )
 
