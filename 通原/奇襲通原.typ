@@ -471,9 +471,12 @@ $ y_o (t) = A_c m(t) cos(phi.alt_c - phi.alt) $
 
   $ plus.minus cos(2 pi f_c t + phi.alt_c) $
 
+  存在相位模糊
 / 科斯塔斯环: 用 $tilde(I)(t) tilde(Q)(t)$ 负反馈，锁定时解调输出
 
 $ tilde(I)(t) approx plus.minus A_c m(t) $
+
+  存在相位模糊
 
 == AM
 
