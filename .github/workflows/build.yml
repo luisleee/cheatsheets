@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '**/*.typ'
+      - '.github/workflows/build.yml'
+  pull_request:
+    paths:
+      - '**/*.typ'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v4
+
+      - name: Compile
+        run: |
+          find . -name '*.typ' \
+            -not -path './typ-layout/*' \
+            -not -path './.git/*' \
+            | while read -r f; do
+              echo "Compiling $f"
+              typst compile --root . "$f"
+            done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cheatsheets
+          path: '**/*.pdf'
+
+      - name: Create release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: '**/*.pdf'
+          generate_release_notes: true

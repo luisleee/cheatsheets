@@ -1,5 +1,5 @@
 #import "/typ-layout/common.typ": cheatsheet
-#import "typ-layout/math-util.typ": *
+#import "/typ-layout/math-util.typ": *
 
 #let FFT = math.op("FFT")
 
