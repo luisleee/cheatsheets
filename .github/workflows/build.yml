@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches: [master]
-    tags: ['v*']
+    tags: ['*']
     paths:
       - '**/*.typ'
       - '.github/workflows/build.yml'
@@ -23,6 +23,9 @@ jobs:
 
       - name: Setup Typst
         uses: typst-community/setup-typst@v4
+
+      - name: Install CJK fonts
+        run: sudo apt-get install -y fonts-noto-cjk
 
       - name: Compile
         run: |
