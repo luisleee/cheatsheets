@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches: [master]
+    tags: ['v*']
     paths:
       - '**/*.typ'
       - '.github/workflows/build.yml'
