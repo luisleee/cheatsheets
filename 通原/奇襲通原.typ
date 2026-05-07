@@ -52,7 +52,7 @@ $ erf(x) = 2 / sqrt(pi) integral_0^x ee^(-t^2) dd(t) $
 
 信号 $x(t)$ 的时间平均
 
-$ overline(x(t)) = lim_(T -> oo) 1 / T integral_(-hfrac(-T, 2))^(+hfrac(T, 2)) x(t) dd(t) $
+$ overline(x(t)) = lim_(T -> oo) 1 / T integral_(-hfrac(T, 2))^(+hfrac(T, 2)) x(t) dd(t) $
 
 能量
 
@@ -357,7 +357,7 @@ $ R_X (tau) = EX(X(t + tau) X^*(t)) $
 
 $ R_(X Y) (tau) = EX(X(t + tau) Y^*(t)) $
 
-平稳过程 $X(t)$ 遍历的即
+平稳过程 $X(t)$ 是遍历的即
 
 $
   Pr(overline(X(t)) = m_X) = 1 \
@@ -399,7 +399,7 @@ $
       P_n & = N_0 / 2 E_h \
 $
 
-$n_w (t)$ 和确定信号 $x(t)$ 的内积服从
+$n_w (t)$ 和确定信号 $x(t),y(t)$ 的内积 $Z_x,Z_y $服从
 
 $ Z_x ~ N(0, hfrac(N_0 E_x, 2)), quad EX(Z_x Z_y) = hfrac(N_0 E_(x y), 2) $
 
@@ -762,4 +762,26 @@ $
 
 $
   x(n T_s) = delta(n) <=> sum_(n = -oo)^(+oo) X(f + frac(n, T_s)) = T_s
+$
+
+具体来说，当$X(f)$截止频率为$W$时
+
+$T_s < 1/2W$：必有ISI
+
+$T_s = 1/2W$：无ISI当且仅当
+
+$
+x(t)= sinc (2W t)
+$
+
+$T_s > 1/2W$：常用升余弦滚降系统，$0 <= alpha <= 1$满足无ISI
+
+$
+x_"rcos"(t)=sinc (frac(t, T_s)) frac(cos(frac(pi alpha t, T_s)),1-4(frac(alpha t,T_s))^2)
+$
+
+理想限带及加性白高斯噪声信道下PAM最佳基带传输（无ISI，误符号率最低）
+
+$
+G_T (f)=G_R (f)=sqrt(X_"rcos" (f))
 $
