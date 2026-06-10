@@ -259,7 +259,16 @@ $
 
 = 基2-FFT
 
-长度 $N$ 是 $2$ 的整数幂。所需复数乘法次数为 $(hfrac(N, 2)) log_2 N$。
+#let p0 = -0.6
+#let p1 = 0.0
+#let p2 = 1.0
+#let p3 = 2.3
+#let p4 = 3.8
+#let p5 = 5.1
+#let p6 = 6.2
+#let pX = 6.8
+
+长度 $N$ 是 $2$ 的整数幂。所需复数乘法次数为 $(hfrac(N, 2)) log_2 N$。原址计算时将二进制编码颠倒进行混序。
 
 == DIT-FFT
 
@@ -270,12 +279,168 @@ $
   X(k + hfrac(N, 2)) & = X_1(k) - W_N^k X_2(k) \
 $
 
+输入混序。
+
+#figure(text(size: 0.40em, diagram(
+  cell-size: 2.0mm,
+  node-stroke: .28pt,
+  edge-stroke: .35pt,
+  node-inset: .08em,
+
+  node((p0, 0.0), [$x(0)$], fill: none, stroke: none),
+  node((p0, 1.0), [$x(2)$], fill: none, stroke: none),
+  node((p0, 2.0), [$x(1)$], fill: none, stroke: none),
+  node((p0, 3.0), [$x(3)$], fill: none, stroke: none),
+
+  node((p1, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p1, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p1, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p1, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p2, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p2, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p2, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p2, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p3, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p3, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p3, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p3, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p4, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p4, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p4, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p4, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p5, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p5, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p5, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p5, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((pX, 0.0), [$X(0)$], fill: none, stroke: none),
+  node((pX, 1.0), [$X(1)$], fill: none, stroke: none),
+  node((pX, 2.0), [$X(2)$], fill: none, stroke: none),
+  node((pX, 3.0), [$X(3)$], fill: none, stroke: none),
+
+  edge((p1, 0.0), (1.0, 0.0), "-|>"),
+  edge((p1, 1.0), (1.0, 1.0), "-|>", label: $W_4^0$),
+  edge((p1, 2.0), (1.0, 2.0), "-|>"),
+  edge((p1, 3.0), (1.0, 3.0), "-|>", label: $W_4^0$),
+
+  edge((p2, 0.0), (p3, 0.0), "-|>"),
+  edge((p2, 1.0), (p3, 0.0), "-|>"),
+  edge((p2, 0.0), (p3, 1.0), "-|>"),
+  edge((p2, 1.0), (p3, 1.0), "-|>", label: $-1$),
+
+  edge((p2, 2.0), (p3, 2.0), "-|>"),
+  edge((p2, 3.0), (p3, 2.0), "-|>"),
+  edge((p2, 2.0), (p3, 3.0), "-|>"),
+  edge((p2, 3.0), (p3, 3.0), "-|>", label: $-1$),
+
+  edge((p3, 0.0), (p4, 0.0), "-|>"),
+  edge((p3, 1.0), (p4, 1.0), "-|>"),
+  edge((p3, 2.0), (p4, 2.0), "-|>", label: $W_4^0$),
+  edge((p3, 3.0), (p4, 3.0), "-|>", label: $W_4^1$),
+
+  edge((p4, 0.0), (p5, 0.0), "-|>"),
+  edge((p4, 2.0), (p5, 0.0), "-|>"),
+  edge((p4, 1.0), (p5, 1.0), "-|>"),
+  edge((p4, 3.0), (p5, 1.0), "-|>"),
+  edge((p4, 0.0), (p5, 2.0), "-|>"),
+  edge((p4, 2.0), (p5, 2.0), "-|>", label: $-1$),
+  edge((p4, 1.0), (p5, 3.0), "-|>"),
+  edge((p4, 3.0), (p5, 3.0), "-|>", label: $-1$),
+
+  edge((p5, 0.0), (p6, 0.0), "-|>"),
+  edge((p5, 1.0), (p6, 1.0), "-|>"),
+  edge((p5, 2.0), (p6, 2.0), "-|>"),
+  edge((p5, 3.0), (p6, 3.0), "-|>")
+)))
+
+
 == DIF-FFT
 
 $
   X(2 r) & = FFT{ x(n) + x(n + hfrac(N, 2)) } \
   X(2 r + 1) & = FFT{ (x(n) - x(n + hfrac(N, 2))) W_N^n } \
 $
+
+输出混序。
+
+#figure(text(size: 0.40em, diagram(
+  cell-size: 2.0mm,
+  node-stroke: .28pt,
+  edge-stroke: .35pt,
+  node-inset: .08em,
+  node((p0, 0.0), [$x(0)$], fill: none, stroke: none),
+  node((p0, 1.0), [$x(1)$], fill: none, stroke: none),
+  node((p0, 2.0), [$x(2)$], fill: none, stroke: none),
+  node((p0, 3.0), [$x(3)$], fill: none, stroke: none),
+
+  node((p1, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p1, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p1, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p1, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p2, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p2, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p2, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p2, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p3, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p3, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p3, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p3, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p4, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p4, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p4, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p4, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((p5, 0.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p5, 1.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p5, 2.0), [], radius: .10mm, fill: black, stroke: none),
+  node((p5, 3.0), [], radius: .10mm, fill: black, stroke: none),
+
+  node((pX, 0.0), [$X(0)$], fill: none, stroke: none),
+  node((pX, 1.0), [$X(2)$], fill: none, stroke: none),
+  node((pX, 2.0), [$X(1)$], fill: none, stroke: none),
+  node((pX, 3.0), [$X(3)$], fill: none, stroke: none),
+
+  edge((p1, 0.0), (p2, 0.0), "-|>"),
+  edge((p1, 1.0), (p2, 1.0), "-|>"),
+  edge((p1, 2.0), (p2, 2.0), "-|>"),
+  edge((p1, 3.0), (p2, 3.0), "-|>"),
+
+  edge((p2, 0.0), (p3, 0.0), "-|>"),
+  edge((p2, 2.0), (p3, 0.0), "-|>"),
+  edge((p2, 1.0), (p3, 1.0), "-|>"),
+  edge((p2, 3.0), (p3, 1.0), "-|>"),
+  edge((p2, 0.0), (p3, 2.0), "-|>"),
+  edge((p2, 2.0), (p3, 2.0), "-|>", label: $-1$),
+  edge((p2, 1.0), (p3, 3.0), "-|>"),
+  edge((p2, 3.0), (p3, 3.0), "-|>", label: $-1$),
+
+  edge((p3, 0.0), (p4, 0.0), "-|>"),
+  edge((p3, 1.0), (p4, 1.0), "-|>"),
+  edge((p3, 2.0), (p4, 2.0), "-|>", label: $W_4^0$),
+  edge((p3, 3.0), (p4, 3.0), "-|>", label: $W_4^1$),
+
+  edge((p4, 0.0), (p5, 0.0), "-|>"),
+  edge((p4, 1.0), (p5, 0.0), "-|>"),
+  edge((p4, 0.0), (p5, 1.0), "-|>"),
+  edge((p4, 1.0), (p5, 1.0), "-|>", label: $-1$),
+  edge((p4, 2.0), (p5, 2.0), "-|>"),
+  edge((p4, 3.0), (p5, 2.0), "-|>"),
+  edge((p4, 2.0), (p5, 3.0), "-|>"),
+  edge((p4, 3.0), (p5, 3.0), "-|>", label: $-1$),
+
+  edge((p5, 0.0), (p6, 0.0), "-|>"),
+  edge((p5, 1.0), (p6, 1.0), "-|>", label: $W_4^0$),
+  edge((p5, 2.0), (p6, 2.0), "-|>"),
+  edge((p5, 3.0), (p6, 3.0), "-|>", label: $W_4^0$)
+)))
+
 
 == IFFT
 
