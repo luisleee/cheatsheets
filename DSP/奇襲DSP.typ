@@ -47,9 +47,9 @@ $ Res[f(z), z_0] = 1 / (n - 1)! lim_(z -> z_0) dv(, z, n - 1) [(z - z_0)^n f(z)]
 
 连续信号 $x_a (t)$ 按取样间隔 $T_s$ 取样，频率 $f_s = 1 / T_s$，得离散信号 $x(n) = x_a (n T_s)$。取样函数 $p(t) = sum_(n = -oo)^(+oo) delta(t - n T_s)$，理想取样信号 $hat(x)_a (t) = x_a (t) p(t)$。
 
-模拟抽样角频率 $Omega_s = 2 pi / T_s$，频谱展开为：
+模拟抽样角频率 $Omega_s = hfrac(2 pi, T_s)$，频谱展开为：
 
-$ hat(X)_a (jj Omega) = Omega_s sum_(n = -oo)^(+oo) X_a (jj (Omega - n Omega_s)) $
+$ hat(X)_a (jj Omega) = 1 / T_s sum_(n = -oo)^(+oo) X_a (jj (Omega - n Omega_s)) $
 
 Nyquist取样定理：取样频率 $f_s >= 2 f_m$ ($f_m$ 是原信号最高频率) 时，可通过理想低通滤波器(理想内插)无失真恢复原信号。
 
@@ -76,7 +76,7 @@ $ X(ee^(jj omega)) = sum_(n = -oo)^(+oo) x(n) ee^(-jj n omega) $
 
 反变换IDTFT
 
-$ x(n) = 1 / (2 pi) integral_(-oo)^(+oo) X(ee^(jj omega)) ee^(jj n omega) dd(omega) $
+$ x(n) = 1 / (2 pi) integral_(-pi)^(+pi) X(ee^(jj omega)) ee^(jj n omega) dd(omega) $
 
 == 性质
 
@@ -195,7 +195,7 @@ $X(k)$ 周期延拓得 $tilde(X)(k)$，即 $tilde(x)(n)$ 的DFS
 
 从Z变换得DFT
 
-$ X(k) = evaluated(X(z))_(z = W_N^k) $
+$ X(k) = evaluated(X(z))_(z = W_N^(-k)) $
 
 Z域内插
 
@@ -455,7 +455,7 @@ $
 + 按数字滤波器指标计算模拟滤波器指标
 + 设计设计模拟低通滤波器$H_"LP" (s)$
 + 进行模拟频率变换得到$H_d (s)$
-+ 进行模数变换得到数字滤波器$H_d(z)$
++ 进行模数变换得到数字滤波器$H_d (z)$
 
 == Butterworth 模拟低通滤波器
 
@@ -567,7 +567,7 @@ $H(omega)$ 是幅度函数，可正可负，$theta(omega)$是相位函数。
 
 严格线性相位指 $theta(omega) = -tau omega$，$tau$ 是常数。
 
-广义线性相位指 $theta(omega) = phi_0 -tau omega$，$phi_0, tau$ 是常数，对于实系数因果FIR来说只存在 $phi_0 = hfrac(pi,2)$的情况。
+广义线性相位指 $theta(omega) = phi_0 -tau omega$，$phi_0, tau$ 是常数，对于实系数因果FIR来说只存在 $phi_0 =  hfrac(pi,2)$的情况。
 
 线性相位FIR的群时延 $tau = hfrac((N-1),2)$
 
