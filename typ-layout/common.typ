@@ -10,7 +10,7 @@
   set document(
     title: title,
     date: date,
-    author: ("fa_555", "luisleee"),
+    author: ("luisleee", "fa_555"),
   )
 
   set page(
